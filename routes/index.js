@@ -21,11 +21,36 @@ const imagePath = '/Users/ginggingi/nodejsStudy/foody/images';
   });
 
   router.get('/get', (req, res) => {
-    const LatLng = req.query.latlng.split(',');
+    const lat = req.query.lat, lng = req.query.lng;
+    const LatLng = [lat, lng];
     const distance = req.query.distance;
 
+    console.log('latitude : ' + lat);
+    console.log('longitude: ' + lng);
+    console.log('distance : ' + distance);
+    console.log('===========================');
+
     foodyModel.findAsDistance(LatLng[0], LatLng[1], distance)
-        .then(it => res.send(it))
+        .then(it => {
+          console.log(it);
+          res.send(it); })
+        .catch(e => console.error(e));
+  });
+
+  router.get('/getSingle', (req, res) => {
+    const lat = req.query.lat, lng = req.query.lng;
+    const LatLng = [lat, lng];
+    const distance = req.query.distance;
+
+    console.log('latitude : ' + lat);
+    console.log('longitude: ' + lng);
+    console.log('distance : ' + distance);
+    console.log('===========================');
+
+    foodyModel.findOneAsDistance(LatLng[0], LatLng[1], distance)
+        .then(it => {
+          console.log(it[0]);
+          res.send(it[0]);})
         .catch(e => console.error(e));
   });
 
@@ -38,7 +63,8 @@ const imagePath = '/Users/ginggingi/nodejsStudy/foody/images';
     const MainMenu = req.body.mainmenu;
     const AveragePrice = req.body.averageprice;
     //좌표
-    const LatLng = req.body.latlng.split(',');
+    const lat = req.body.lat, lng = req.body.lng;
+    const LatLng = [lat, lng];
     //이미지 저장후 리스트화
     var FileArray = [];
     Files.forEach((file) => { FileArray.push(file.originalname); });

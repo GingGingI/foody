@@ -27,13 +27,24 @@ foodySchema.statics.findAsTitle = function(title) {
   return this.find({ Title: title });
 };
 foodySchema.statics.findAsDistance = function(lat, lng, distance) {
-  return this.find({
-    location: {
-      $geoWithin: {
-        $centerSphere: [[lng, lat], (distance * 0.001) / 6378.1]
-      }
+  return this.aggregate([{
+    $geoNear: {
+      near: {type: "point", coordinates: [parseFloat(lng), parseFloat(lat)]},
+      key: "location",
+      distanceField: "dist.calculated",
+      maxDistance: distance
     }
-  });
+  }]);
+};
+foodySchema.statics.findOneAsDistance = function(lat, lng, distance) {
+  return this.aggregate([{
+    $geoNear: {
+      near: {type: "point", coordinates: [parseFloat(lng), parseFloat(lat)]},
+      key: "location",
+      distanceField: "dist.calculated",
+      maxDistance: distance
+    }
+  }]).sample(1);
 };
 
 //Update
