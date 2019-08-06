@@ -4,13 +4,13 @@ const
     foodyModel = require('../models/foodyModel'),
     router = express.Router();
 
-const imagePath = '/Users/ginggingi/nodejsStudy/foody/images';
+const imagePath = '/Users/ginggingi/nodejsStudy/foody/public/images';
 
 /* etc. */
   const upload = multer({
     storage: multer.diskStorage({
       destination: (req, file, cb) => { cb(null, imagePath); },
-      filename: (req, file, cb) => { cb(null, new Date().valueOf() + '_' + file.originalname); },
+      filename: (req, file, cb) => { cb(null, new Date().valueOf() + ".png") },
     })
   });
 
@@ -42,9 +42,9 @@ const imagePath = '/Users/ginggingi/nodejsStudy/foody/images';
     const LatLng = [lat, lng];
     const distance = req.query.distance;
 
-    console.log('latitude : ' + lat);
-    console.log('longitude: ' + lng);
-    console.log('distance : ' + distance);
+    console.log('lat : ' + lat);
+    console.log('lng: ' + lng);
+    console.log('dis : ' + distance);
     console.log('===========================');
 
     foodyModel.findOneAsDistance(LatLng[0], LatLng[1], distance)
@@ -67,7 +67,7 @@ const imagePath = '/Users/ginggingi/nodejsStudy/foody/images';
     const LatLng = [lat, lng];
     //이미지 저장후 리스트화
     var FileArray = [];
-    Files.forEach((file) => { FileArray.push(file.originalname); });
+    Files.forEach((file) => { FileArray.push(file.filename); });
 
     var item = {
       Title: Title,
