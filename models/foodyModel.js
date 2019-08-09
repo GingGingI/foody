@@ -30,9 +30,10 @@ foodySchema.statics.findAsDistance = function(lat, lng, distance) {
   return this.aggregate([{
     $geoNear: {
       near: {type: "point", coordinates: [parseFloat(lng), parseFloat(lat)]},
+      spherical: true,
       key: "location",
       distanceField: "dist.calculated",
-      maxDistance: distance
+      maxDistance: distance * 1000
     }
   }]);
 };
@@ -40,9 +41,10 @@ foodySchema.statics.findOneAsDistance = function(lat, lng, distance) {
   return this.aggregate([{
     $geoNear: {
       near: {type: "point", coordinates: [parseFloat(lng), parseFloat(lat)]},
+      spherical: true,
       key: "location",
       distanceField: "dist.calculated",
-      maxDistance: distance
+      maxDistance: distance * 1000
     }
   }]).sample(1);
 };

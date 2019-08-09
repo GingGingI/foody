@@ -49,7 +49,7 @@ const imagePath = '/Users/ginggingi/nodejsStudy/foody/public/images';
 
     foodyModel.findOneAsDistance(LatLng[0], LatLng[1], distance)
         .then(it => {
-          console.log(it[0]);
+          console.log(it);
           res.send(it[0]);})
         .catch(e => console.error(e));
   });
