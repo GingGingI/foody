@@ -2,6 +2,7 @@ const
     express = require('express') ,
     multer = require('multer'),
     foodyModel = require('../models/foodyModel'),
+    Status = require('../models/Status'),
     router = express.Router();
 
 const imagePath = '/Users/ginggingi/nodejsStudy/foody/public/images';
@@ -25,11 +26,6 @@ const imagePath = '/Users/ginggingi/nodejsStudy/foody/public/images';
     const LatLng = [lat, lng];
     const distance = req.query.distance;
 
-    console.log('latitude : ' + lat);
-    console.log('longitude: ' + lng);
-    console.log('distance : ' + distance);
-    console.log('===========================');
-
     foodyModel.findAsDistance(LatLng[0], LatLng[1], distance)
         .then(it => {
           console.log(it);
@@ -42,16 +38,14 @@ const imagePath = '/Users/ginggingi/nodejsStudy/foody/public/images';
     const LatLng = [lat, lng];
     const distance = req.query.distance;
 
-    console.log('lat : ' + lat);
-    console.log('lng: ' + lng);
-    console.log('dis : ' + distance);
-    console.log('===========================');
-
     foodyModel.findOneAsDistance(LatLng[0], LatLng[1], distance)
         .then(it => {
           console.log(it);
-          res.send(it[0]);})
-        .catch(e => console.error(e));
+          if (it[0] != null && (it[0].dist.calculated <= distance))
+            res.status(Status.Success).send(it[0]);
+          else res.status(Status.NoContent).send();
+        })
+        .catch(e => res.status(Status.ServerError).send(e));
   });
 
   router.post('/set', upload.array('img', 10), (req, res) => {

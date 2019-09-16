@@ -30,26 +30,14 @@ foodySchema.statics.findAsDistance = function(lat, lng, distance) {
   return this.aggregate([{
     $geoNear: {
       near: {type: "point", coordinates: [parseFloat(lng), parseFloat(lat)]},
-      spherical: true,
-      key: "location",
-      distanceField: "dist.calculated",
-      maxDistance: distance * 1000
+      spherical: true, distanceField: "dist.calculated", maxDistance: Number(distance)
     }
   }]);
 };
 foodySchema.statics.findOneAsDistance = function(lat, lng, distance) {
-  return this.aggregate([{
-    $geoNear: {
-      near: {type: "point", coordinates: [parseFloat(lng), parseFloat(lat)]},
-      spherical: true,
-      key: "location",
-      distanceField: "dist.calculated",
-      maxDistance: distance * 1000
-    }
-  }]).sample(1);
+  return this.findAsDistance(lat,lng, distance).sample(1);
 };
 
 //Update
-
 
 module.exports = mongoose.model('restaurant', foodySchema);
